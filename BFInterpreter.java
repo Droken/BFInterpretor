@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 
-public class BrainfuckInterpreter{
+public class BFInterpreter{
 
 	private Vector<Character> Buff;
 	private int Pointer;
@@ -13,7 +13,7 @@ public class BrainfuckInterpreter{
 		Code = new String();
 		Pointer = 0;
 		Buff = new Vector<Character>(1000);
-				for(int i = 0; i < 1000; i++)
+		for(int i = 0; i < 1000; i++)
 			Buff.add((char)0);
 	}
 
@@ -23,30 +23,30 @@ public class BrainfuckInterpreter{
 			return;
 		}
 
-		BrainfuckInterpreter bi;
+		BFInterpreter bi;
 			File file = new File(args[0]);
 
 			if(file.exists() && !file.isDirectory()) {
-				bi = new BrainfuckInterpreter(file);
+				bi = new BFInterpreter(file);
 			} else {
-				bi = new BrainfuckInterpreter(args[0]);
+				bi = new BFInterpreter(args[0]);
 			}
 
 		bi.runCode();
 		System.out.println();	// End the program by printing a new line
 	}
 
-	public BrainfuckInterpreter(File f) {
+	public BFInterpreter(File f) {
 		loadFile(f);
 	}
 
-	public BrainfuckInterpreter(String _code)
+	public BFInterpreter(String _code)
 	{
 		Init();
 		Code = _code;
 	}
 
-	public BrainfuckInterpreter()
+	public BFInterpreter()
 	{
 		Init();
 	}

@@ -104,7 +104,7 @@ public class BrainfuckInterpreter
 
   private void executeOp(char op)
   {
-    if(".,<>+-".indexOf(op)==-1);
+    if(".,<>+-@".indexOf(op)==-1);
     else
     {
       //System.out.print(op);
@@ -136,6 +136,10 @@ public class BrainfuckInterpreter
           }
           catch(IOException e) { System.err.println("Error executing the source file : " + e.getMessage()); }
           break;
+		case '@':
+			displayArray(Math.max(Pointer-5, 0), Math.min(Pointer+5, Buff.capacity()-1));
+			System.out.println();
+			break;
       }//switch
 
     }//else
@@ -150,7 +154,7 @@ public class BrainfuckInterpreter
     {
       //System.out.println("Instruction #"+i);
       char op=s.charAt(i);
-      if(".,<>+-".indexOf(op)!=-1) executeOp(op);
+      if(".,<>+-@".indexOf(op)!=-1) executeOp(op);
       else if(op=='[')
       {
         String loop = getLoop(s.substring(i));
@@ -171,11 +175,13 @@ public class BrainfuckInterpreter
     String loop = new String("");
     for(int j=0,b = 0;;j++)
     {
-      char op=base.charAt(j);
+      char op = base.charAt(j);
+	  System.out.println(op);
       //System.out.println(op + " "+ b +"\t"+j+"/"+base.length()+"\tP="+Pointer+"/"+Buff.capacity()+"=>\t"+(int)Buff.elementAt(Pointer));
-      if((b<=1&&op==']'))break;
+      if(b<=1&&op==']') break;
       if(op=='[')      b++;
       else if(op==']') b--;
+
       if(j>0)loop+=op;
       //System.out.println(loop);
     }//for
@@ -185,7 +191,7 @@ public class BrainfuckInterpreter
   private String trimCode(String code)
   {
     String s = new String();
-    for(int i=0;i<code.length();i++)if(".,<>+-[]".indexOf(code.charAt(i))!=-1)s+=code.charAt(i);
+    for(int i=0;i<code.length();i++)if(".,<>+-[]@".indexOf(code.charAt(i))!=-1)s+=code.charAt(i);
     return s;
   }
 

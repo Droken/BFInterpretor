@@ -21,7 +21,14 @@ public class BrainfuckInterpreter
   {
     if(args.length<1){System.out.println("Add a file to interpret as argument"); return;}
 
-    BrainfuckInterpreter bi = new BrainfuckInterpreter(new File(args[0]));
+	File file = new File(args[0]);
+	BrainfuckInterpreter bi;
+	if(file.exists() && !file.isDirectory()) {
+		bi = new BrainfuckInterpreter(file);
+	} else {
+		bi = new BrainfuckInterpreter(args[0]);
+	}
+
     bi.runCode();
 
     //End the program by printing a new line feed

@@ -21,13 +21,13 @@ public class BrainfuckInterpreter
   {
     if(args.length<1){System.out.println("Add a file to interpret as argument"); return;}
 
-	File file = new File(args[0]);
-	BrainfuckInterpreter bi;
-	if(file.exists() && !file.isDirectory()) {
-		bi = new BrainfuckInterpreter(file);
-	} else {
-		bi = new BrainfuckInterpreter(args[0]);
-	}
+  	File file = new File(args[0]);
+  	BrainfuckInterpreter bi;
+  	if(file.exists() && !file.isDirectory()) {
+  		bi = new BrainfuckInterpreter(file);
+  	} else {
+  		bi = new BrainfuckInterpreter(args[0]);
+  	}
 
     bi.runCode();
 
@@ -60,24 +60,12 @@ public class BrainfuckInterpreter
     catch(IOException e) { System.err.println("Error loading the source file : " + e.getMessage());}
   }
 
-  private void executeLoop(String loop) //Boucles infinies quand imbriquées
+  private void executeLoop(String loop)
   {
-    //System.out.print("[");
-    //int i=0;
-    //int min=100000;
-    //displayArray(0,4);System.out.println(" | Before loop we're in : "+Pointer +" | "+ (int)Buff.elementAt(Pointer)+" | Test = "+((Pointer<0)?"true":"false"));
-    //System.out.println("At the "+Pointer+"th case of the array we have "+(int)Buff.elementAt(Pointer)+" so (Buff[pointer]!=0)="+((Buff.elementAt(Pointer)!=0)?"true":"false"));
     while((int)Buff.elementAt(Pointer)!=0)
     {
-      //if(Buff.elementAt(Pointer)<min)min = Buff.elementAt(Pointer);
-      //System.out.println("Tour #"+(i++)+"\tPointer on "+(int)Buff.elementAt(Pointer)+" : ["+Pointer+"]");
       runCode(loop);
-      //System.out.print(" | tour "+i+"+>"+(int)Buff.elementAt(Pointer)+"| ");
-      //i++;
-      //if(i>=100)System.out.print("Erreur 100+ tours");
-      //System.out.println(" Pointer on "+Pointer);
     }
-    //System.out.print("]");
 
   }
 
@@ -107,7 +95,6 @@ public class BrainfuckInterpreter
     if(".,<>+-".indexOf(op)==-1);
     else
     {
-      //System.out.print(op);
       switch(op)
       {
         case '+':
@@ -117,14 +104,10 @@ public class BrainfuckInterpreter
             Buff.set(Pointer, (char)((int)Buff.elementAt(Pointer)-1));
           break;
         case '<':
-            //System.out.print(Pointer+" to ");
             Pointer--;
-            //System.out.println(Pointer);
           break;
         case '>':
-            //System.out.print(Pointer+" to ");
             Pointer++;
-            //System.out.println(Pointer);
           break;
         case '.':
             System.out.print(Buff.elementAt(Pointer));
@@ -139,45 +122,36 @@ public class BrainfuckInterpreter
       }//switch
 
     }//else
-      //displayArray(0,4);System.out.println(" after "+op);
 
   }
 
   private void runCode(String s)
   {
-    //System.out.println("Running "+s);
     for(int i=0;i<s.length();++i)
     {
-      //System.out.println("Instruction #"+i);
       char op=s.charAt(i);
       if(".,<>+-".indexOf(op)!=-1) executeOp(op);
       else if(op=='[')
       {
         String loop = getLoop(s.substring(i));
-        //scanLoop(loop);
-        //displayArray(0,5);
         while((int)Buff.elementAt(Pointer)!=0)
           runCode(loop);
-        i+=loop.length()-1;
+        i+=loop.length();
       }//else if op==[
     }//for
-    //System.out.println("Executed : "+(int)Buff.elementAt(Pointer));
 
   }//runCode
 
   private String getLoop(String base)
   {
-    //System.out.println(base);
     String loop = new String("");
     for(int j=0,b = 0;;j++)
     {
       char op=base.charAt(j);
-      //System.out.println(op + " "+ b +"\t"+j+"/"+base.length()+"\tP="+Pointer+"/"+Buff.capacity()+"=>\t"+(int)Buff.elementAt(Pointer));
       if((b<=1&&op==']'))break;
       if(op=='[')      b++;
       else if(op==']') b--;
       if(j>0)loop+=op;
-      //System.out.println(loop);
     }//for
     return trimCode(loop);
   }

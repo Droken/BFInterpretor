@@ -60,27 +60,6 @@ public class BrainfuckInterpreter
     catch(IOException e) { System.err.println("Error loading the source file : " + e.getMessage());}
   }
 
-  private void executeLoop(String loop) //Boucles infinies quand imbriquées
-  {
-    //System.out.print("[");
-    //int i=0;
-    //int min=100000;
-    //displayArray(0,4);System.out.println(" | Before loop we're in : "+Pointer +" | "+ (int)Buff.elementAt(Pointer)+" | Test = "+((Pointer<0)?"true":"false"));
-    //System.out.println("At the "+Pointer+"th case of the array we have "+(int)Buff.elementAt(Pointer)+" so (Buff[pointer]!=0)="+((Buff.elementAt(Pointer)!=0)?"true":"false"));
-    while((int)Buff.elementAt(Pointer)!=0)
-    {
-      //if(Buff.elementAt(Pointer)<min)min = Buff.elementAt(Pointer);
-      //System.out.println("Tour #"+(i++)+"\tPointer on "+(int)Buff.elementAt(Pointer)+" : ["+Pointer+"]");
-      runCode(loop);
-      //System.out.print(" | tour "+i+"+>"+(int)Buff.elementAt(Pointer)+"| ");
-      //i++;
-      //if(i>=100)System.out.print("Erreur 100+ tours");
-      //System.out.println(" Pointer on "+Pointer);
-    }
-    //System.out.print("]");
-
-  }
-
   private void displayArray(int deb,int fin)
   {
     for(int i=deb;(i++)<fin;System.out.print((int)Buff.elementAt(i)+" "));
@@ -137,7 +116,7 @@ public class BrainfuckInterpreter
           catch(IOException e) { System.err.println("Error executing the source file : " + e.getMessage()); }
           break;
 		case '@':
-			displayArray(Math.max(Pointer-5, 0), Math.min(Pointer+5, Buff.capacity()-1));
+			displayArray(Math.max(Pointer-5, -1), Math.min(Pointer+5, Buff.capacity()-1));
 			System.out.println();
 			break;
       }//switch
@@ -161,8 +140,9 @@ public class BrainfuckInterpreter
         //scanLoop(loop);
         //displayArray(0,5);
         while((int)Buff.elementAt(Pointer)!=0)
-          runCode(loop);
-        i+=loop.length()-1;
+			runCode(loop);
+
+        i+=loop.length();
       }//else if op==[
     }//for
     //System.out.println("Executed : "+(int)Buff.elementAt(Pointer));
@@ -176,7 +156,6 @@ public class BrainfuckInterpreter
     for(int j=0,b = 0;;j++)
     {
       char op = base.charAt(j);
-	  System.out.println(op);
       //System.out.println(op + " "+ b +"\t"+j+"/"+base.length()+"\tP="+Pointer+"/"+Buff.capacity()+"=>\t"+(int)Buff.elementAt(Pointer));
       if(b<=1&&op==']') break;
       if(op=='[')      b++;

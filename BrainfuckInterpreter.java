@@ -4,7 +4,7 @@ import java.io.*;
 public class BrainfuckInterpreter
 {
 
-  private Vector<Character> Array;
+  private Vector<Character> Buff;
   private int Pointer;
 
   private String Code;
@@ -13,8 +13,8 @@ public class BrainfuckInterpreter
   {
       Code = new String();
       Pointer=0;
-      Array = new Vector<Character>(1000);
-      for (int i=0;i<1000;i++) Array.add((char)0);
+      Buff = new Vector<Character>(1000);
+      for (int i=0;i<1000;i++) Buff.add((char)0);
   }
 
   public static void main(String[] args)
@@ -58,14 +58,14 @@ public class BrainfuckInterpreter
     //System.out.print("[");
     //int i=0;
     //int min=100000;
-    //displayArray(0,4);System.out.println(" | Before loop we're in : "+Pointer +" | "+ (int)Array.elementAt(Pointer)+" | Test = "+((Pointer<0)?"true":"false"));
-    //System.out.println("At the "+Pointer+"th case of the array we have "+(int)Array.elementAt(Pointer)+" so (Array[pointer]!=0)="+((Array.elementAt(Pointer)!=0)?"true":"false"));
-    while((int)Array.elementAt(Pointer)!=0/* && i<100*/)
+    //displayArray(0,4);System.out.println(" | Before loop we're in : "+Pointer +" | "+ (int)Buff.elementAt(Pointer)+" | Test = "+((Pointer<0)?"true":"false"));
+    //System.out.println("At the "+Pointer+"th case of the array we have "+(int)Buff.elementAt(Pointer)+" so (Buff[pointer]!=0)="+((Buff.elementAt(Pointer)!=0)?"true":"false"));
+    while((int)Buff.elementAt(Pointer)!=0)
     {
-      //if(Array.elementAt(Pointer)<min)min = Array.elementAt(Pointer);
-      //System.out.println("Tour #"+(i++)+"\tPointer on "+(int)Array.elementAt(Pointer)+" : ["+Pointer+"]");
+      //if(Buff.elementAt(Pointer)<min)min = Buff.elementAt(Pointer);
+      //System.out.println("Tour #"+(i++)+"\tPointer on "+(int)Buff.elementAt(Pointer)+" : ["+Pointer+"]");
       runCode(loop);
-      //System.out.print(" | tour "+i+"+>"+(int)Array.elementAt(Pointer)+"| ");
+      //System.out.print(" | tour "+i+"+>"+(int)Buff.elementAt(Pointer)+"| ");
       //i++;
       //if(i>=100)System.out.print("Erreur 100+ tours");
       //System.out.println(" Pointer on "+Pointer);
@@ -76,21 +76,22 @@ public class BrainfuckInterpreter
 
   private void displayArray(int deb,int fin)
   {
-    for(int i=deb;(i++)<fin;System.out.print((int)Array.elementAt(i)+" "));
+    for(int i=deb;(i++)<fin;System.out.print((int)Buff.elementAt(i)+" "));
   }
 
   private void scanLoop(String loop)
   {
-    Vector<Character> b = (Vector<Character>)Array.clone();
+    @SuppressWarnings("unchecked")
+    Vector<Character> b = (Vector<Character>)Buff.clone();
     int p2 = Pointer;
     Pointer = 0;
-    for (int i=0;i<1000;i++) Array.add((char)0);
+    for (int i=0;i<1000;i++) Buff.add((char)0);
     System.out.println(loop);
     runCode(loop);
     displayArray(0,10);System.out.println();
     for(int i=1;i<Pointer;i++)System.out.print(" ");
     System.out.println("^");
-    Array=b;
+    Buff=b;
     Pointer=p2;
   }
 
@@ -103,10 +104,10 @@ public class BrainfuckInterpreter
       switch(op)
       {
         case '+':
-            Array.set(Pointer, (char)((int)Array.elementAt(Pointer)+1));
+            Buff.set(Pointer, (char)((int)Buff.elementAt(Pointer)+1));
           break;
         case '-':
-            Array.set(Pointer, (char)((int)Array.elementAt(Pointer)-1));
+            Buff.set(Pointer, (char)((int)Buff.elementAt(Pointer)-1));
           break;
         case '<':
             //System.out.print(Pointer+" to ");
@@ -119,12 +120,12 @@ public class BrainfuckInterpreter
             //System.out.println(Pointer);
           break;
         case '.':
-            System.out.print(Array.elementAt(Pointer));
+            System.out.print(Buff.elementAt(Pointer));
           break;
         case ',':
           try
           {
-            Array.set(Pointer,(char)System.in.read());
+            Buff.set(Pointer,(char)System.in.read());
           }
           catch(IOException e) { System.err.println("Error executing the source file : " + e.getMessage()); }
           break;
@@ -147,12 +148,13 @@ public class BrainfuckInterpreter
       {
         String loop = getLoop(s.substring(i));
         //scanLoop(loop);
-        while((int)Array.elementAt(Pointer)!=0)
+        //displayArray(0,5);
+        while((int)Buff.elementAt(Pointer)!=0)
           runCode(loop);
         i+=loop.length()-1;
       }//else if op==[
     }//for
-    //System.out.println("Executed : "+(int)Array.elementAt(Pointer));
+    //System.out.println("Executed : "+(int)Buff.elementAt(Pointer));
 
   }//runCode
 
@@ -163,7 +165,7 @@ public class BrainfuckInterpreter
     for(int j=0,b = 0;;j++)
     {
       char op=base.charAt(j);
-      //System.out.println(op + " "+ b +"\t"+j+"/"+base.length()+"\tP="+Pointer+"/"+Array.capacity()+"=>\t"+(int)Array.elementAt(Pointer));
+      //System.out.println(op + " "+ b +"\t"+j+"/"+base.length()+"\tP="+Pointer+"/"+Buff.capacity()+"=>\t"+(int)Buff.elementAt(Pointer));
       if((b<=1&&op==']'))break;
       if(op=='[')      b++;
       else if(op==']') b--;
@@ -185,6 +187,6 @@ public class BrainfuckInterpreter
     try {
       runCode(trimCode(Code));
     }
-    catch(java.lang.ArrayIndexOutOfBoundsException e) { System.out.println();System.out.println();displayArray(0,10);System.out.println("  |  Erreur dans la case de l'array numero "+Pointer+" ("+Array.elementAt(Pointer)+" or "+(int)Array.elementAt(Pointer)+") : ");}
+    catch(java.lang.ArrayIndexOutOfBoundsException e) { System.out.println();System.out.println();displayArray(0,10);System.out.println("  |  Erreur dans la case de l'array numero "+Pointer+" ("+Buff.elementAt(Pointer)+" or "+(int)Buff.elementAt(Pointer)+") : ");}
   }
 }

@@ -21,13 +21,13 @@ public class BrainfuckInterpreter
   {
     if(args.length<1){System.out.println("Add a file to interpret as argument"); return;}
 
-	File file = new File(args[0]);
-	BrainfuckInterpreter bi;
-	if(file.exists() && !file.isDirectory()) {
-		bi = new BrainfuckInterpreter(file);
-	} else {
-		bi = new BrainfuckInterpreter(args[0]);
-	}
+  	File file = new File(args[0]);
+  	BrainfuckInterpreter bi;
+  	if(file.exists() && !file.isDirectory()) {
+  		bi = new BrainfuckInterpreter(file);
+  	} else {
+  		bi = new BrainfuckInterpreter(args[0]);
+  	}
 
     bi.runCode();
 
@@ -60,6 +60,15 @@ public class BrainfuckInterpreter
     catch(IOException e) { System.err.println("Error loading the source file : " + e.getMessage());}
   }
 
+  private void executeLoop(String loop)
+  {
+    while((int)Buff.elementAt(Pointer)!=0)
+    {
+      runCode(loop);
+    }
+
+  }
+
   private void displayArray(int deb,int fin)
   {
     for(int i=deb;(i++)<fin;System.out.print((int)Buff.elementAt(i)+" "));
@@ -86,7 +95,6 @@ public class BrainfuckInterpreter
     if(".,<>+-@".indexOf(op)==-1);
     else
     {
-      //System.out.print(op);
       switch(op)
       {
         case '+':
@@ -96,14 +104,10 @@ public class BrainfuckInterpreter
             Buff.set(Pointer, (char)((int)Buff.elementAt(Pointer)-1));
           break;
         case '<':
-            //System.out.print(Pointer+" to ");
             Pointer--;
-            //System.out.println(Pointer);
           break;
         case '>':
-            //System.out.print(Pointer+" to ");
             Pointer++;
-            //System.out.println(Pointer);
           break;
         case '.':
             System.out.print(Buff.elementAt(Pointer));
@@ -122,47 +126,37 @@ public class BrainfuckInterpreter
       }//switch
 
     }//else
-      //displayArray(0,4);System.out.println(" after "+op);
 
   }
 
   private void runCode(String s)
   {
-    //System.out.println("Running "+s);
     for(int i=0;i<s.length();++i)
     {
-      //System.out.println("Instruction #"+i);
       char op=s.charAt(i);
       if(".,<>+-@".indexOf(op)!=-1) executeOp(op);
       else if(op=='[')
       {
         String loop = getLoop(s.substring(i));
-        //scanLoop(loop);
-        //displayArray(0,5);
         while((int)Buff.elementAt(Pointer)!=0)
 			runCode(loop);
-
         i+=loop.length();
       }//else if op==[
     }//for
-    //System.out.println("Executed : "+(int)Buff.elementAt(Pointer));
 
   }//runCode
 
   private String getLoop(String base)
   {
-    //System.out.println(base);
     String loop = new String("");
     for(int j=0,b = 0;;j++)
     {
-      char op = base.charAt(j);
-      //System.out.println(op + " "+ b +"\t"+j+"/"+base.length()+"\tP="+Pointer+"/"+Buff.capacity()+"=>\t"+(int)Buff.elementAt(Pointer));
-      if(b<=1&&op==']') break;
+      char op=base.charAt(j);
+      if((b<=1&&op==']'))break;
       if(op=='[')      b++;
       else if(op==']') b--;
 
       if(j>0)loop+=op;
-      //System.out.println(loop);
     }//for
     return trimCode(loop);
   }

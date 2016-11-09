@@ -2,8 +2,6 @@
 import java.io.IOException;
 
 public class Operator extends AbstractOperator {
-
-	private char op;
 	
 	protected boolean loop = false;
 	
@@ -39,7 +37,13 @@ public class Operator extends AbstractOperator {
 			memory.movePointerLeft();
 			break;
 		case '>':
-			memory.movePointerRight();
+			try {
+				memory.movePointerRight();
+			} catch(ArrayIndexOutOfBoundsException e) {
+				// Enlarge memory array when overflow
+				System.out.println("OKAY C'EST BON !!!");
+				memory.enlarge();
+			}
 			break;
 		case '.':
 			System.out.print(memory.current());

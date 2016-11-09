@@ -9,6 +9,8 @@ public abstract class AbstractOperator {
 	
 	public boolean isLoop() { return this.loop; }
 	
+	public String getSymbol() { return ""+this.op; }
+	
 	public abstract boolean run(Memory memory);
 	
 }

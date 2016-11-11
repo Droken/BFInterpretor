@@ -7,9 +7,11 @@ public class BFInterpreter{
 
 	private Memory memory;
 	private Code code;
+	
+	public static BFInterpreter instance;
 
 	private void Init() {
-		this.memory = new Memory();
+		this.memory = new Memory(30000, this);
 	}
 
 	public static void main(String[] args) {
@@ -18,14 +20,15 @@ public class BFInterpreter{
 			return;
 		}
 
-		BFInterpreter bi;
 		File file = new File(args[0]);
 
 		if(file.exists() && !file.isDirectory()) {
-			bi = new BFInterpreter(file);
+			instance = new BFInterpreter(file);
 		} else {
-			bi = new BFInterpreter(args[0]);
+			instance = new BFInterpreter(args[0]);
 		}
+		
+		instance.run();
 
 		System.out.println();	// End the program by printing a new line
 	}
@@ -38,7 +41,34 @@ public class BFInterpreter{
 	{
 		Init();
 		this.code = new Code(code);
-		this.code.run(this.memory);
+	}
+	
+	public void dump(int targetIndex) {
+		int length = 50;
+		String out = "";
+		
+		out += ' ' + new String(new char[length]).replace('\0', '-');
+		
+		out += this.memory.dump();
+		
+		out += "\n " + new String(new char[length]).replace('\0', '-') + '\n';
+		
+		String trace = this.code.getTrace(length, targetIndex);
+		int colorControlChars = 14;
+		int traceLength = trace.length()-colorControlChars; // Remove color control chars
+		
+		trace = trace.substring(0, Math.min(length, traceLength+colorControlChars));
+		trace = trace + new String(new char[Math.max(0, length-traceLength)]).replace('\0', ' ');
+		
+		out += "| " + trace + " |";
+		
+		out += "\n " + new String(new char[length]).replace('\0', '-') + '\n';
+		
+		System.out.println(out);
+	}
+	
+	public boolean run() {
+		return this.code.run(this.memory);
 	}
 
 	static public String fromFile(File f) {

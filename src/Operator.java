@@ -1,27 +1,26 @@
-
 import java.io.IOException;
 
 public class Operator extends AbstractOperator {
 	
-	protected boolean loop = false;
 	
-	static public char CHR_INPUT = ',';
-	static public char CHR_OUTPUT = '.';
-	static public char CHR_PLUS = '+';
-	static public char CHR_MINUS = '-';
-	static public char CHR_RIGHT = '>';
-	static public char CHR_LEFT = '<';
-	static public char CHR_DUMP = '@';
-	static public String OPS_CLASSIC = ""+CHR_INPUT+CHR_OUTPUT+CHR_PLUS+CHR_MINUS+CHR_RIGHT+CHR_LEFT;
-	static public String OPS_NOL = OPS_CLASSIC+CHR_DUMP;
-	static public String OPS_ALL = OPS_NOL+LoopOperator.OPS_LOOPS;
+	public static char CHR_INPUT = ',';
+	public static char CHR_OUTPUT = '.';
+	public static char CHR_PLUS = '+';
+	public static char CHR_MINUS = '-';
+	public static char CHR_RIGHT = '>';
+	public static char CHR_LEFT = '<';
+	public static char CHR_DUMP = '@';
+	public static String OPS_CLASSIC = ""+CHR_INPUT+CHR_OUTPUT+CHR_PLUS+CHR_MINUS+CHR_RIGHT+CHR_LEFT;
+	public static String OPS_NOL = OPS_CLASSIC+CHR_DUMP;
+	public static String OPS_ALL = OPS_NOL+LoopOperator.OPS_LOOPS;
 	
 	public Operator() {
-		this(Operator.CHR_NULL);
+		this(Operator.CHR_NULL, -2);
 	}
 	
-	public Operator(char op) {
+	public Operator(char op, int index) {
 		this.op = op;
+		this.index = index;
 	}
 	
 	@Override
@@ -31,7 +30,8 @@ public class Operator extends AbstractOperator {
 			memory.set((char)((int)memory.current()+1));
 			break;
 		case '-':
-			memory.set((char)((int)memory.current()-1));
+			char n = (char)((int)memory.current()-1);
+			memory.set(n > 255 ? (char)255 : n);
 			break;
 		case '<':
 			memory.movePointerLeft();
@@ -42,7 +42,7 @@ public class Operator extends AbstractOperator {
 			} catch(ArrayIndexOutOfBoundsException e) {
 				// Enlarge memory array when overflow
 				System.out.println("OKAY C'EST BON !!!");
-				memory.enlarge();
+//				memory.enlarge();
 			}
 			break;
 		case '.':
@@ -50,13 +50,17 @@ public class Operator extends AbstractOperator {
 			break;
 		case ',':
 			try {
-				memory.set((char)System.in.read());
+				char in = (char)System.in.read();
+				
+				memory.set(in == '\n' ? 0 : in);
+				if(System.in.available() > 0)
+					System.in.skip(1); // Skip newline
 			} catch(IOException e) {
-				System.err.println("Error executing the source file : " + e.getMessage());
+				System.err.println("Invalid input.");
 			}
 			break;
 		case '@':
-			memory.dump();
+			BFInterpreter.instance.dump(this.index);
 			break;
 		default:
 			return false;

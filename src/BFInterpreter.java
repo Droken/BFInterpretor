@@ -1,3 +1,12 @@
+/**
+ * @file BFInterpreter.java
+ * @author Droken
+ * @author ZanyMonk
+ * @brief A Brainfuck interpreter
+ * 
+ * Takes a string or a Brainfuck script file path as argument.
+ */
+
 import java.util.Vector;
 import java.util.Scanner;
 import java.io.File;
@@ -6,12 +15,12 @@ import java.io.IOException;
 public class BFInterpreter{
 
 	private Memory memory;
-	private Code code;
+	private Program code;
 	
 	public static BFInterpreter instance;
 
 	private void Init() {
-		this.memory = new Memory(30000, this);
+		this.memory = new Memory(30000);
 	}
 
 	public static void main(String[] args) {
@@ -40,7 +49,11 @@ public class BFInterpreter{
 	public BFInterpreter(String code)
 	{
 		Init();
-		this.code = new Code(code);
+		this.code = new Program(code);
+	}
+	
+	public int getCodePointerPosition() {
+		return this.code.getPointerPosition();
 	}
 	
 	public void dump(int targetIndex) {
@@ -53,7 +66,7 @@ public class BFInterpreter{
 		
 		out += "\n " + new String(new char[length]).replace('\0', '-') + '\n';
 		
-		String trace = this.code.getTrace(length, targetIndex);
+		String trace = this.code.getTrace(targetIndex, length);
 		int colorControlChars = 14;
 		int traceLength = trace.length()-colorControlChars; // Remove color control chars
 		

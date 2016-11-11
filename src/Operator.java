@@ -1,3 +1,12 @@
+/**
+ * @file Operator.java
+ * @author Droken
+ * @author ZanyMonk
+ * @brief Operator class
+ * 
+ * Represents a single op code.
+ */
+
 import java.io.IOException;
 
 public class Operator extends AbstractOperator {

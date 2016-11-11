@@ -1,13 +1,20 @@
+/**
+ * @file Memory.java
+ * @author Droken
+ * @author ZanyMonk
+ * @brief Memory class
+ * 
+ * Represents the memory of a program composed of 8-bit cells.
+ */
+
 import java.util.Vector;
 
 public class Memory {
 	
 	private final Vector<Character> memory;
 	private int pointer;
-	private BFInterpreter interpreter;
 	
-	public Memory(int size, BFInterpreter interpreter) {
-		this.interpreter = interpreter;
+	public Memory(int size) {
 		this.memory = new Vector<>();
 		this.pointer = 0;
 		this.addMemSpace(size);

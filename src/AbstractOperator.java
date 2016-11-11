@@ -1,3 +1,12 @@
+/**
+ * @file AbstractOperator.java
+ * @author Droken
+ * @author ZanyMonk
+ * @brief AbstractOperator class
+ * 
+ * Represent all sorts of operator (op code, loop, program).
+ */
+
 public abstract class AbstractOperator {
 	
 	protected boolean loop = false;

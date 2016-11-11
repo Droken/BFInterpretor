@@ -1,4 +1,13 @@
-public class LoopOperator extends Code {
+/**
+ * @file LoopOperator.java
+ * @author Droken
+ * @author ZanyMonk
+ * @brief LoopOperator class
+ * 
+ * Represents a loop.
+ */
+
+public class LoopOperator extends Program {
 	
 	private int iterations = 0;
 	
@@ -45,7 +54,7 @@ public class LoopOperator extends Code {
 	
 	@Override
 	public String getSymbol(int targetIndex) {
-		return '['+this.getTrace(this.length(), targetIndex)+']';
+		return '['+this.getTrace(targetIndex, this.getSymbol().length())+']';
 	}
 	
 	@Override

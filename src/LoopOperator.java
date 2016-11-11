@@ -1,5 +1,7 @@
 public class LoopOperator extends Code {
 	
+	private int iterations = 0;
+	
 	public static char CHR_LSTART = '[';
 	public static char CHR_LEND = ']';
 	public static String OPS_LOOPS = ""+CHR_LSTART+CHR_LEND;
@@ -13,6 +15,22 @@ public class LoopOperator extends Code {
 	public LoopOperator(String code, int index) {
 		super(code, index);
 		this.loop = true;
+	}
+	
+	private boolean loop(Memory memory) {
+		AbstractOperator o;
+		
+		this.opIndex = 0;
+		
+		while(this.opIndex < this.operators.size()) {
+			o = this.operatorAt(this.opIndex);
+			if(o.run(memory) == false)
+				return false;
+
+			this.opIndex++;
+		}
+		
+		return true;
 	}
 	
 //	@Override
@@ -32,12 +50,12 @@ public class LoopOperator extends Code {
 	
 	@Override
 	public boolean run(Memory memory) {
-		AbstractOperator o;
 		while(memory.current() != 0) {
-			o = this.operatorAt(this.pointer);
-			o.run(memory);
-			this.pointer++;
+			if(this.loop(memory) == false)
+				return false;
+			this.iterations++;
 		}
+		this.iterations = 0;
 		
 		return true;
 	}

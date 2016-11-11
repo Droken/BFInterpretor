@@ -30,8 +30,7 @@ public class Operator extends AbstractOperator {
 			memory.set((char)((int)memory.current()+1));
 			break;
 		case '-':
-			char n = (char)((int)memory.current()-1);
-			memory.set(n > 255 ? (char)255 : n);
+			memory.set((char)(((int)memory.current()-1)%255));
 			break;
 		case '<':
 			memory.movePointerLeft();

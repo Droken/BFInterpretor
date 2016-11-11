@@ -2,8 +2,10 @@ import java.util.Vector;
 
 public class Code extends AbstractOperator {
 	
+	private int pointer;
+	
 	protected Vector<AbstractOperator> operators;
-	protected int pointer, opIndex;
+	protected int opIndex;
 	
 	public Code() {
 		this(-1);
@@ -85,10 +87,11 @@ public class Code extends AbstractOperator {
 	}
 	
 	public AbstractOperator operatorAt(int index) {
-		if(index > this.length()-1) {
-			System.err.println("Execution pointer out of stack.");
-			Runtime.getRuntime().exit(1);
-		}
+//		System.err.println(this.opIndex+" in "+this.index);
+//		if(index > this.length()-1) {
+//			System.err.println("Execution pointer ("+index+") out of stack.");
+//			Runtime.getRuntime().exit(1);
+//		}
 		
 		return this.operators.elementAt(index);
 	}

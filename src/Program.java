@@ -37,10 +37,13 @@ public class Program extends AbstractOperator {
 		code = this.clean(code);
 		
 		if(		code.length() == 1
-			&&	code.charAt(0) == LoopOperator.CHR_LEND)
+			&&	code.charAt(0) == LoopOperator.CHR_LEND
+		)
 			code = "";
-		else if(		code.charAt(0) == LoopOperator.CHR_LSTART
-			&&	code.charAt(code.length()-1) == LoopOperator.CHR_LEND) {	// Trim loop wards if the whole code is in a loop
+		else if(
+				code.charAt(0) == LoopOperator.CHR_LSTART
+			&&	code.charAt(code.length()-1) == LoopOperator.CHR_LEND
+		) {	// Trim loop wards if the whole code is in a loop
 			code = code.substring(1, code.length()-1);
 		}
 		
@@ -101,12 +104,6 @@ public class Program extends AbstractOperator {
 	}
 	
 	public AbstractOperator operatorAt(int index) {
-//		System.err.println(this.opIndex+" in "+this.index);
-//		if(index > this.length()-1) {
-//			System.err.println("Execution pointer ("+index+") out of stack.");
-//			Runtime.getRuntime().exit(1);
-//		}
-		
 		return this.operators.elementAt(index);
 	}
 	
@@ -130,10 +127,6 @@ public class Program extends AbstractOperator {
 			end = Math.min(Math.max(10, targetIndex+length/2), this.operators.size()-1);
 		}
 		int opI = start;
-		
-		System.out.println("target: "+targetIndex);
-		System.out.println("ptr: "+this.pointer);
-		System.out.println("from "+start+" to "+end+'\n');
 		
 		for(int i = start; i <= end; opI++) {
 			o = this.operators.elementAt(opI);

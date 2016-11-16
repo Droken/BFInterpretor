@@ -1,1 +1,1 @@
-# BFInterpretor
+# BFInterpreter

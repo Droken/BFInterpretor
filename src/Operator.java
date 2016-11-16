@@ -39,19 +39,17 @@ public class Operator extends AbstractOperator {
 			memory.set((char)((int)memory.current()+1));
 			break;
 		case '-':
-			memory.set((char)(((int)memory.current()-1)%255));
+			int n = (int)memory.current()-1;
+			if(n < 0) {
+				n = 255;
+			}
+			memory.set((char)n);
 			break;
 		case '<':
 			memory.movePointerLeft();
 			break;
 		case '>':
-			try {
-				memory.movePointerRight();
-			} catch(ArrayIndexOutOfBoundsException e) {
-				// Enlarge memory array when overflow
-				System.out.println("OKAY C'EST BON !!!");
-//				memory.enlarge();
-			}
+			memory.movePointerRight();
 			break;
 		case '.':
 			System.out.print(memory.current());
